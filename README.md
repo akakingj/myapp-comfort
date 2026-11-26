@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> **개인 사본 (akakingj/myapp-comfort)** — IterioDev/car-apps `eedd105` 기준 복사본입니다.
+> **개인 사본 (akakingj/myapp-comfort)** — IterioDev/car-apps `f6e2b75`(1.1.93) 기준 복사본입니다.
 > 2026-11-25 IterioDev 허락: 저장소 주인 1인이 자기 차에서 테스트하는 목적의 수정에 한함. 공유·배포·공개 불가.
 > 라이선스는 원본 `LICENSE.md`(PolyForm Strict) 그대로입니다.
 
