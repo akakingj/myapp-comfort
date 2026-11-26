@@ -1,0 +1,23 @@
+{
+ "id": "akakingj_seats",
+ "version": "1.7.0",
+ "title": "Seats",
+ "description": "Move the driver and passenger seats from the central display, also while driving, both on one page: each seat seen from the side with its controls round it (fore / aft, height, backrest, tilt and headrest, while you hold them), three memories per seat under it, the Gentleman button (parked only) that moves the passenger seat out of the way and back, and easy exit for both front seats: save each one's getting-out position and it moves there when its door opens with the car standing and someone in the seat (never with a child seat on it), and back once the door is shut (the driver with the car o",
+ "mguHmi": [
+  "ID7",
+  "ID8"
+ ],
+ "needs": [
+  "renderer"
+ ],
+ "requires": {
+  "iteriodev-comfort": "0.6.1",
+  "mgu-deploy": "0.7.5"
+ },
+ "texts": {
+  "ko": {
+   "title": "시트",
+   "description": "운전석과 조수석 시트를 중앙 화면에서 움직입니다(주행 중에도). 한 화면에 두 시트를 옆모습으로 보여 주고, 둘레의 버튼(전후, 높이, 등받이, 쿠션 각도, 헤드레스트)을 누르고 있는 동안 움직입니다. 시트마다 메모리 3개, 조수석을 비켜 주고 원위치로 돌리는 공간 확보(정차 중), 앞좌석 하차 위치: 저장해 두면 정차 중 문을 열 때 그 위치로 움직이고(시트에 사람이 있을 때, 카시트가 있으면 움직이지 않음) 문을 닫으면 원위치로 돌아옵니다. 시트 스위치가 항상 우선합니다. 우핸들 설정. Comfort 도구가 필요합니다(Store가 함께 설치)."
+  }
+ }
+}
