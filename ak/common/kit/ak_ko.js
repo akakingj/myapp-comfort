@@ -6,12 +6,12 @@
  * matches any text there and passes it on ("Its seat module answered: {0}"). A string with no entry is drawn as it
  * is (and kept in misses() for the PC check). font(family, s): text with Hangul in it is drawn with the Korean
  * atlas (fonts/ak_korean.json, ak_korean_bold.json for the bold family), which has the Latin letters and digits too;
- * everything else keeps the app's own fonts.
+ * everything else keeps the app's own fonts. Text in capitals (the design's caps labels) matches its key in any case.
  */
 const fs = require('fs');
 const path = require('path');
 
-let exact = Object.create(null), patterns = [];
+let exact = Object.create(null), upper = Object.create(null), patterns = [];
 try {
     const table = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'ko.json'), 'utf8'));
     for (const k of Object.keys(table)) {
@@ -23,8 +23,8 @@ try {
                 if (m) { names.push(+m[1]); return '([\\s\\S]+?)'; }
                 return p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             }).join('') + '$');
-            patterns.push({ re, names, to: table[k] });
-        } else exact[k] = table[k];
+            patterns.push({ re, reI: new RegExp(re.source, 'i'), names, to: table[k] });
+        } else { exact[k] = table[k]; if (!(k.toUpperCase() in upper)) upper[k.toUpperCase()] = table[k]; }
     }
 } catch (e) { /* no table: English */ }
 
@@ -35,8 +35,10 @@ function tr(str) {
     const s = String(str);
     if (!s || HANGUL.test(s)) return s;
     if (exact[s] !== undefined) return exact[s];
+    const caps = s === s.toUpperCase();
+    if (caps && upper[s] !== undefined) return upper[s];
     for (const p of patterns) {
-        const m = p.re.exec(s);
+        const m = (caps ? p.reI : p.re).exec(s);
         if (m) {
             const v = [];
             p.names.forEach((n, i) => { v[n] = tr(m[i + 1]); });

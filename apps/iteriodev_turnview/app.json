@@ -1,6 +1,6 @@
 {
  "id": "iteriodev_turnview",
- "version": "1.7.1",
+ "version": "1.8.0",
  "title": "Turn View",
  "description": "The front camera in the instrument cluster with a turn card and, near each turn, a blue turn sign (three chevrons pointing the way), from BMW Maps, Apple CarPlay or Android Auto; the camera shows with or without a route. Or on the head unit instead: the Camera button opens the camera's whole picture with the same card and sign, at any speed (Picture on: Head unit), for kerbs and tight gaps. Cars with BMW Night Vision (1.7.0): Camera Night Vision shows its picture instead, in the cluster or here (read from the head unit's own video input; BMW's Night Vision screen then stays black). iDrive 8: p",
  "mguHmi": [
@@ -13,5 +13,11 @@
  "requires": {
   "iteriodev-turnview": "0.10.0",
   "mgu-deploy": "0.7.5"
+ },
+ "texts": {
+  "ko": {
+   "title": "턴 뷰",
+   "description": "계기판에 전방 카메라 영상을 띄우고, 길 안내 중에는 회전 카드와 회전 지점 근처의 파란 회전 표시(방향을 가리키는 세 개의 화살표)를 겹쳐 보여 줍니다(BMW 지도, Apple CarPlay, Android Auto). 경로가 없어도 카메라는 나옵니다. 또는 중앙 화면에: 카메라 버튼으로 같은 카드와 표시가 있는 전체 카메라 영상을 속도와 상관없이 봅니다(연석, 좁은 길). BMW 나이트 비전 차량은 그 영상으로 바꿀 수 있습니다. iDrive 7은 시동마다 꺼지며 앱에서 켜고, 계기판 가운데 영역을 지도 보기로 둡니다. 전방 카메라(360 또는 전방+후방), 턴 뷰 도구, Cluster renderer 0.5.10 이상이 필요합니다. 계기판의 회전 카드는 영어로 나옵니다."
+  }
  }
 }

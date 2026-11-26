@@ -1,5 +1,8 @@
 {
  "_note": "Seats (IterioDev) in Korean: { English as the app draws it: 한국어 }. {0}, {1}: any text, passed on. Terms: myapp-id7's ko.tsv, jaimeen77-cmyk/apps seats_easy_access (MIT), the car's own menus.",
+ "_keep": [
+  "Developed by IterioDev and RobertNisipeanu"
+ ],
  "Seats": "시트",
  "SEATS": "시트",
  "Settings": "설정",

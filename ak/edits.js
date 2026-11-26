@@ -127,4 +127,31 @@ const akakingj_seats = [
     { top: true, file: 'src/main.js', find: "const COL = { dim: '#8b9099', accent: '#ffb020', warn: '#ffb020' };", replace: "const COL = { dim: '#b5b3b4', accent: '#ff570c', warn: '#ffb020' };", why: 'the skin\'s colours' },
 ];
 
-module.exports = { common, RECOLOR, akakingj_seats };
+/* Turn View: the calibration's legend shows the marks in the colours the tool draws them in the cluster (its
+ * shaders.js MARKS: red, amber, green), not the skin's */
+const iteriodev_turnview = [
+    { file: 'renderer/screens.json', find: '"color": "#f32d2e",\n            "radius": 0', replace: '"color": "#ff3b30",\n            "radius": 0', why: 'the 5 m mark' },
+    { file: 'renderer/screens.json', find: '"color": "#ff570c",\n            "radius": 0', replace: '"color": "#ffb020",\n            "radius": 0', why: 'the 10 m mark' },
+    { file: 'renderer/screens.json', find: '"color": "#f32d2e",\n              "radius": 0', replace: '"color": "#ff3b30",\n              "radius": 0', why: 'the 5 m mark (iDrive 7)' },
+    { file: 'renderer/screens.json', find: '"color": "#ff570c",\n              "radius": 0', replace: '"color": "#ffb020",\n              "radius": 0', why: 'the 10 m mark (iDrive 7)' },
+];
+
+/* Drive Recorder: its own words' colours in the skin's (warning amber and saved green stay) */
+const oap_driverecorder_next = [
+    { top: true, file: 'src/ui.js', find: "const CRIT = '#ff3b30', WARN = '#ffb020', OK = '#5bd68a', TEXT = '#f2f2f2', DIM = '#8b9099', FAINT = '#4a4f57';",
+        replace: "const CRIT = '#f32d2e', WARN = '#ffb020', OK = '#5bd68a', TEXT = '#f4f3f2', DIM = '#b5b3b4', FAINT = '#5d5b60';", why: 'the skin\'s colours' },
+];
+
+/* Tailscale: its states' colours in the skin's */
+const akakingj_tailscale = [
+    { top: true, file: 'src/main.js', find: "const OK = '#5bd68a', ACCENT = '#ffb020', DIM = '#8b9099', CRIT = '#ff3b30';",
+        replace: "const OK = '#5bd68a', ACCENT = '#ff570c', DIM = '#b5b3b4', CRIT = '#f32d2e';", why: 'the skin\'s colours' },
+];
+
+/* Ambient Light: the swatch of a zone that keeps the car's colour, in the skin's grey */
+const akakingj_ambient = [
+    { top: true, file: 'src/main.js', find: "const CAR_GREY = '#8b9099';", replace: "const CAR_GREY = '#b5b3b4';", why: 'the skin\'s colours' },
+];
+
+module.exports = { common, RECOLOR, akakingj_seats, iteriodev_turnview, 'oap-driverecorder-next': oap_driverecorder_next, akakingj_tailscale,
+    akakingj_ambient };

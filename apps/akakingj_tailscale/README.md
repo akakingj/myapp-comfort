@@ -1,8 +1,11 @@
 # Tailscale
 
+> **한국어 · iDrive 7 스킨 (이 저장소 주인의 개인 테스트용 사본)**
+> 화면 글자를 한국어로, 메뉴를 iDrive 7 순정 스킨으로 바꾼 사본입니다. 기능은 IterioDev의 Tailscale 1.2.1과 같고, 같은 Tailscale 도구를 씁니다. 패키지 `akakingj_tailscale` 1.3.0, 원본(`iteriodev_tailscale`)과 따로 설치됩니다. 만드는 방법: [docs/ak-patch.md](../../docs/ak-patch.md). 아래 설명과 스크린숏은 원본(영어)의 것입니다.
+
 Log the head unit in to your tailnet without a computer: shows Tailscale's state, the login link as a QR code to scan with your phone, the head unit's tailnet name and address, Rename (default mgu), Disconnect / Connect (switched off, still logged in) and Log out. Works with the iDrive controller. Needs the Tailscale tool from the same source.
 
-Version 1.2.1 · iDrive 7 and 8 · package `iteriodev_tailscale` · [all apps and how to install](../../README.md)
+Version 1.3.0 (from IterioDev's 1.2.1) · iDrive 7 and 8 · package `akakingj_tailscale` · [all apps and how to install](../../README.md)
 
 > [!NOTE]
 > Logging in and connecting work on an iDrive 7 car (MGU18, issue #51). 1.2.0's Disconnect and the iDrive controller are
