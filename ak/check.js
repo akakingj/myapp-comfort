@@ -2,9 +2,9 @@
 'use strict';
 /**
  * ak/check.js [id ...] - checks this copy's packages (ak/apps.json) as committed, on a PC:
- *  - files: apps/<id>/ holds app.json and <id>@<version>.tgz only beside README, icon and screenshots; IterioDev's
- *    folder is gone (unless keepId); no .mgu, dist/ or oap-sdk anywhere in the package;
- *  - names: mgu-app.json, package.json, rhmiData/application.json and app.json agree on id and version;
+ *  - files: apps/<id>/ holds app.json and <id>@<version>.tgz only beside README, icon and screenshots (IterioDev's
+ *    id, this copy's version); no .mgu, dist/ or oap-sdk anywhere in the package;
+ *  - names: mgu-app.json, package.json and app.json agree on id and version; rhmiData/application.json is IterioDev's;
  *  - syntax: node --check on every .js, JSON.parse on every .json of the package;
  *  - HMI texts: a ko_KR.json beside every en_GB.json, the same keys, Korean;
  *  - the Korean module and fonts are ak/common's; each atlas at most 512 rows;
@@ -29,13 +29,13 @@ const HANGUL = /[가-힣]/;
 const commonKit = path.join(AK, 'common', 'kit');
 
 for (const app of SPEC) {
+    app.id = app.from;
     if (only.length && only.indexOf(app.id) < 0) continue;
     console.log(`${app.id} ${app.version}`);
     const dir = path.join(ROOT, 'apps', app.id), tree = `${app.id}@${app.version}`, tgz = path.join(dir, `${tree}.tgz`);
     /* files */
     if (!fs.existsSync(tgz)) { fail(app, `no ${path.relative(ROOT, tgz)}`); continue; }
     for (const n of fs.readdirSync(dir)) if (['app.json', 'README.md', 'icon.png', 'screenshots', `${tree}.tgz`].indexOf(n) < 0) fail(app, `apps/${app.id}/${n}: not ours`);
-    if (!app.keepId && fs.existsSync(path.join(ROOT, 'apps', app.from))) fail(app, `apps/${app.from} still there`);
     const store = readJson(path.join(dir, 'app.json'));
     if (store.id !== app.id || store.version !== app.version) fail(app, 'app.json id / version');
     if (!store.texts || !store.texts.ko || !HANGUL.test(store.texts.ko.title + store.texts.ko.description)) fail(app, 'app.json: no Korean texts');
@@ -52,9 +52,9 @@ for (const app of SPEC) {
     const m = readJson(path.join(tmp, 'mgu-app.json')), pkg = readJson(path.join(T, 'package.json'));
     if (m.id !== app.id || m.version !== app.version || m.tree !== tree) fail(app, 'mgu-app.json');
     if (pkg.name !== app.id || pkg.version !== app.version) fail(app, 'package.json');
-    if (!app.keepId && pkg.oapAppSettings.loggingId !== app.loggingId) fail(app, 'package.json loggingId');
-    const a = readJson(path.join(T, 'rhmiData', 'application.json')).application;
-    if (a.name !== app.id) fail(app, `rhmiData/application.json name ${a.name}`);
+    // the HMI's registration as IterioDev's (an update of their app)
+    const orig = execFileSync('sh', ['-c', `git -C "${ROOT}" show "main:apps/${app.id}/${app.id}@${app.fromVersion}.tgz" | tar -xzOf - "${app.id}@${app.fromVersion}/rhmiData/application.json"`]);
+    if (!orig.equals(fs.readFileSync(path.join(T, 'rhmiData', 'application.json')))) fail(app, 'rhmiData/application.json is not IterioDev\'s');
     /* syntax */
     for (const f of files) {
         if (/\.js$/.test(f)) { try { execFileSync(process.execPath, ['--check', f], { stdio: 'pipe' }); } catch (e) { fail(app, `${path.relative(tmp, f)}: ${String(e.stderr).split('\n').slice(0, 5).join(' ')}`); } }

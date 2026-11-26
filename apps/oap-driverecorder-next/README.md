@@ -1,7 +1,7 @@
 # Drive Recorder
 
 > **한국어 · iDrive 7 스킨 (이 저장소 주인의 개인 테스트용 사본)**
-> 화면 글자를 한국어로, 메뉴를 iDrive 7 순정 스킨으로 바꾼 사본입니다. 기능은 IterioDev의 Drive Recorder 2.5.2와 같습니다(진단 화면의 값은 지원용이라 영어 그대로). 버전 2.6.0, 패키지 이름은 원본과 같은 `oap-driverecorder-next`입니다(카메라 녹화 허용 키와 플레이어 도구가 이 이름으로 앱을 찾으므로 바꾸지 않음). 그래서 원본 대신 설치됩니다. 만드는 방법: [docs/ak-patch.md](../../docs/ak-patch.md). 아래 설명과 스크린숏은 원본(영어)의 것입니다.
+> 화면 글자를 한국어로, 메뉴를 iDrive 7 순정 스킨으로 바꾼 사본입니다. 기능은 IterioDev의 Drive Recorder 2.5.2와 같습니다(진단 화면의 값은 지원용이라 영어 그대로). 버전 2.6.0, 패키지 이름은 원본과 같은 `oap-driverecorder-next`입니다(카메라 녹화 허용 키와 플레이어 도구가 이 이름으로 앱을 찾으므로 바꾸지 않음). 그래서 원본의 업데이트로 설치됩니다. 만드는 방법: [docs/ak-patch.md](../../docs/ak-patch.md). 아래 설명과 스크린숏은 원본(영어)의 것입니다.
 
 Keeps the car's cameras recording and saves a clip when you ask; watch, lock, delete and copy clips to a USB stick while the car stands still. Over 4 GB the oldest unlocked clips are replaced. The Store installs the Drive Recorder player with it.
 

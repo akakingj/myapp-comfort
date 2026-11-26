@@ -1,7 +1,7 @@
 # Turn View
 
 > **한국어 · iDrive 7 스킨 (이 저장소 주인의 개인 테스트용 사본)**
-> 중앙 화면의 글자를 한국어로, 메뉴를 iDrive 7 순정 스킨으로 바꾼 사본입니다. 기능은 IterioDev의 Turn View 1.7.1과 같고, 계기판의 회전 카드는 도구가 그리므로 영어 그대로입니다. 버전 1.8.0, 패키지 이름은 원본과 같은 `iteriodev_turnview`입니다(턴 뷰 도구가 이 이름으로 앱을 시작하므로 바꾸지 않음). 그래서 원본 대신 설치됩니다. 만드는 방법: [docs/ak-patch.md](../../docs/ak-patch.md). 아래 설명과 스크린숏은 원본(영어)의 것입니다.
+> 중앙 화면의 글자를 한국어로, 메뉴를 iDrive 7 순정 스킨으로 바꾼 사본입니다. 기능은 IterioDev의 Turn View 1.7.1과 같고, 계기판의 회전 카드는 도구가 그리므로 영어 그대로입니다. 버전 1.8.0, 패키지 이름은 원본과 같은 `iteriodev_turnview`입니다(턴 뷰 도구가 이 이름으로 앱을 시작하므로 바꾸지 않음). 그래서 원본의 업데이트로 설치됩니다. 만드는 방법: [docs/ak-patch.md](../../docs/ak-patch.md). 아래 설명과 스크린숏은 원본(영어)의 것입니다.
 
 The front camera in the instrument cluster, with a turn card (arrow and distance) and, near each turn, a blue turn sign
 (three chevrons pointing the way, like a curve sign; 1.5.1, tool 0.8.0) while a route is running; none while driving

@@ -5,27 +5,32 @@
 
 ## 무엇을 바꾸나
 
-| 앱 | 원본 (main) | 이 사본 (test) | 패키지 이름 |
-|---|---|---|---|
-| Seats | `iteriodev_seats` 1.6.4 | 1.7.0 | `akakingj_seats` |
-| Turn View | `iteriodev_turnview` 1.7.1 | 1.8.0 | `iteriodev_turnview` (원본과 같음) |
-| Drive Recorder | `oap-driverecorder-next` 2.5.2 | 2.6.0 | `oap-driverecorder-next` (원본과 같음) |
-| Tailscale | `iteriodev_tailscale` 1.2.1 | 1.3.0 | `akakingj_tailscale` |
-| Ambient Light | `iteriodev_ambient` 1.4.4 | 1.5.0 | `akakingj_ambient` |
+| 앱 | 원본 (main) | 이 사본 (test) |
+|---|---|---|
+| Seats | `iteriodev_seats` 1.6.4 | 1.7.0 |
+| Turn View | `iteriodev_turnview` 1.7.1 | 1.8.0 |
+| Drive Recorder | `oap-driverecorder-next` 2.5.2 | 2.6.0 |
+| Tailscale | `iteriodev_tailscale` 1.2.1 | 1.3.0 |
+| Ambient Light | `iteriodev_ambient` 1.4.4 | 1.5.0 |
 
 - 기능은 그대로이고 `tools/`는 건드리지 않습니다. 화면 글자(한국어 고정)와 색·포커스 모양(iDrive 7 순정 스킨 고정)만 바뀝니다.
-- Turn View와 Drive Recorder는 이름을 바꾸지 않습니다. 턴 뷰 도구는 `iteriodev_turnview`로 앱을 시작하고,
-  Drive Recorder는 카메라 녹화 허용 키(`/data/oap-driverecorder-next/@enabled`)와 플레이어 도구(`setup.sh`,
-  `autostart.sh`, `usb-rw.sh`)가 `oap-driverecorder-next`로 앱을 찾기 때문입니다. 두 앱은 원본 대신 설치되고,
-  원본이 이 사본보다 높은 버전을 내면 Store가 원본으로 업데이트를 권할 수 있습니다.
+- 패키지 이름(id)은 원본과 같고 버전만 원본보다 높습니다. 그래서 설치된 원본 앱의 업데이트로 설치되고, 도구가 앱을 찾는
+  이름(턴 뷰 도구의 `hmictl start iteriodev_turnview`, 드라이브 레코더의 녹화 허용 키와 플레이어 도구)도 그대로 맞습니다.
+  앱 쪽 설정(앰비언트 프리셋, 시트의 우핸들 설정 등)과 도구의 데이터(시트 메모리, Tailscale 로그인)도 그대로 남습니다.
+- Store는 설치된 앱을 그 앱을 설치한 소스에서만 업데이트하고, 다른 소스가 빌드하는 같은 id의 앱은 `<id>2` 같은 다른
+  이름으로 따로 설치합니다(mgu-updater README, "Ids"). 그래서 이 사본으로 업데이트하려면 Store의 소스 목록에서
+  IterioDev/car-apps를 지워야 합니다. 그러면 그 소스가 설치한 앱과 도구는 같은 제목을 가진 이 사본의 것이 업데이트하게
+  됩니다(IterioDev의 다른 앱·도구도 이 사본 기준이 되고, IterioDev의 새 업데이트는 이 저장소에 반영해야 받습니다).
+  IterioDev/car-apps가 목록에 있는 채로 이 사본의 앱을 설치하지 않습니다(`<id>2`로 설치되면 도구와 맞지 않음).
+- 원본이 이 사본보다 높은 버전을 내면, 이 사본도 그 위의 번호로 올립니다.
 - Turn View 계기판의 회전 카드는 도구가 그리므로 영어 그대로입니다. 보정 화면의 표시선 범례는 계기판 선 색(빨강,
   호박색, 초록)을 그대로 씁니다.
 - 경고(호박색)와 정상(초록) 상태 색은 뜻이 있으므로 그대로 둡니다.
 
 ## 파일
 
-- `ak/apps.json`: 앱 목록(원본 id·버전, 새 id·버전, loggingId, keepId, Store의 한국어 제목·설명).
-- `ak/repack.js`: main에 커밋된 원본 tgz를 풀어 이름을 바꾸고, `ak/common/kit`(한국어 모듈 `ak_ko.js`, 글꼴)과
+- `ak/apps.json`: 앱 목록(원본 id·버전, 이 사본의 버전, Store의 한국어 제목·설명).
+- `ak/repack.js`: main에 커밋된 원본 tgz를 풀어 버전을 바꾸고, `ak/common/kit`(한국어 모듈 `ak_ko.js`, 글꼴)과
   앱의 `ak/apps/<id>/ko.json`을 넣고, `ak/edits.js`의 수정을 하고, 다시 묶어 `apps/<id>/<id>@<버전>.tgz`로 씁니다.
   각 `rhmiData/**/en_GB.json` 옆에 `ko.json`으로 번역한 `ko_KR.json`을 만들고(없는 말이 있으면 멈춤),
   `apps/<id>/app.json`에 `texts.ko`(Store의 한국어 제목·설명)를 넣습니다.
@@ -57,7 +62,7 @@
 
 ## PC 점검 (`node ak/check.js`)
 
-- 파일: `apps/<id>/`에 app.json, tgz, README, icon, screenshots만 있고 원본 폴더가 없음(keepId 제외). 패키지에
+- 파일: `apps/<id>/`에 app.json, tgz(이 사본의 버전), README, icon, screenshots만 있음. 패키지에
   `.mgu`, `dist/`, `oap-sdk`가 없음.
 - 이름: mgu-app.json, package.json, rhmiData/application.json, app.json의 id·버전이 같음.
 - 문법: 모든 `.js`에 `node --check`, 모든 `.json` 읽기.

@@ -123,7 +123,7 @@ const RECOLOR = {
 };
 
 /* the same colours set by the apps' own code (src/, the package's top) */
-const akakingj_seats = [
+const iteriodev_seats = [
     { top: true, file: 'src/main.js', find: "const COL = { dim: '#8b9099', accent: '#ffb020', warn: '#ffb020' };", replace: "const COL = { dim: '#b5b3b4', accent: '#ff570c', warn: '#ffb020' };", why: 'the skin\'s colours' },
 ];
 
@@ -143,15 +143,15 @@ const oap_driverecorder_next = [
 ];
 
 /* Tailscale: its states' colours in the skin's */
-const akakingj_tailscale = [
+const iteriodev_tailscale = [
     { top: true, file: 'src/main.js', find: "const OK = '#5bd68a', ACCENT = '#ffb020', DIM = '#8b9099', CRIT = '#ff3b30';",
         replace: "const OK = '#5bd68a', ACCENT = '#ff570c', DIM = '#b5b3b4', CRIT = '#f32d2e';", why: 'the skin\'s colours' },
 ];
 
 /* Ambient Light: the swatch of a zone that keeps the car's colour, in the skin's grey */
-const akakingj_ambient = [
+const iteriodev_ambient = [
     { top: true, file: 'src/main.js', find: "const CAR_GREY = '#8b9099';", replace: "const CAR_GREY = '#b5b3b4';", why: 'the skin\'s colours' },
 ];
 
-module.exports = { common, RECOLOR, akakingj_seats, iteriodev_turnview, 'oap-driverecorder-next': oap_driverecorder_next, akakingj_tailscale,
-    akakingj_ambient };
+module.exports = { common, RECOLOR, iteriodev_seats, iteriodev_turnview, 'oap-driverecorder-next': oap_driverecorder_next, iteriodev_tailscale,
+    iteriodev_ambient };

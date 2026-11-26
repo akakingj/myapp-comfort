@@ -1,11 +1,11 @@
 # Ambient Light
 
 > **한국어 · iDrive 7 스킨 (이 저장소 주인의 개인 테스트용 사본)**
-> 화면 글자를 한국어로, 메뉴를 iDrive 7 순정 스킨으로 바꾼 사본입니다. 기능은 IterioDev의 Ambient Light 1.4.4와 같고, 같은 Comfort 도구를 씁니다. 패키지 `akakingj_ambient` 1.5.0, 원본(`iteriodev_ambient`)과 따로 설치됩니다(둘을 함께 쓰면 같은 조명을 서로 바꾸므로 하나만 쓰세요). 만드는 방법: [docs/ak-patch.md](../../docs/ak-patch.md). 아래 설명과 스크린숏은 원본(영어)의 것입니다.
+> 화면 글자를 한국어로, 메뉴를 iDrive 7 순정 스킨으로 바꾼 사본입니다. 기능은 IterioDev의 Ambient Light 1.4.4와 같고, 같은 Comfort 도구를 씁니다. 버전 1.5.0, 패키지 이름은 원본과 같은 `iteriodev_ambient`여서 원본의 업데이트로 설치됩니다. 만드는 방법: [docs/ak-patch.md](../../docs/ak-patch.md). 아래 설명과 스크린숏은 원본(영어)의 것입니다.
 
 Any color on the interior ambient light, not only the car's own presets, on one screen: your car's zones in a list (dash, doors, footwell, console, seats, roof: the ones it has), a color bar for any shade, brightness (or follow the car's, dimmer at night), the car's colors as starting points and six presets of your own that keep every zone's color. Each zone can follow the main color, have its own, or keep the car's. A zone with two kinds of light (an X6's dash: a line above, decor below) shows as two rows, each with its own color. Drive modes: a color for each drive mode (Sport, Comfort, Eco Pro, their Plus and Individual, Adaptive) that the light switches to with the mode. Works while the car's own ambient light is switched on. Needs the Comfort tool (the Store installs it with the app).
 
-Version 1.5.0 (from IterioDev's 1.4.4) · iDrive 7 and 8 · package `akakingj_ambient` · [all apps and how to install](../../README.md)
+Version 1.5.0 (from IterioDev's 1.4.4) · iDrive 7 and 8 · package `iteriodev_ambient` · [all apps and how to install](../../README.md)
 
 > [!NOTE]
 > Bowers & Wilkins speaker and tweeter lights are not controllable: they keep the car's own color (set it in the car's menu, or with the car's colors in the app).

@@ -7,7 +7,7 @@
  *   node ak/repack.js --tree DIR [id]   also leaves each unpacked package in DIR/<id> (ak/check.js, ak/preview.js)
  *
  * For each app: IterioDev's package as committed on main (apps/<from>/<from>@<fromVersion>.tgz) is unpacked in a
- * temporary folder, renamed (ak/apps.json: id, version, loggingId; keepId: only the version changes), given the
+ * temporary folder, given this copy's version (ak/apps.json; the id stays IterioDev's, so it installs as an update), the
  * common files (ak/common: the Korean module, its fonts) and its own table (ak/apps/<id>/ko.json, which also gives the
  * HMI texts: each rhmiData en_GB.json gets a ko_KR.json beside it), the edits of ak/edits.js made (each must find its text exactly where it says, or the run stops), and packed again. Nothing
  * unpacked is kept in the repository. When IterioDev's packages change: commit theirs to main, set fromVersion,
@@ -16,7 +16,6 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const crypto = require('crypto');
 const { execFileSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
@@ -34,11 +33,6 @@ for (let i = 0; i < args.length; i++) {
 
 const readJson = (p) => JSON.parse(fs.readFileSync(p, 'utf8'));
 const writeJson = (p, o, indent) => fs.writeFileSync(p, JSON.stringify(o, null, indent === undefined ? 2 : indent) + '\n');
-/* the same uuid for the same id every run, unlike IterioDev's */
-function uuidOf(id) {
-    const h = crypto.createHash('sha1').update('akakingj/myapp-comfort:' + id).digest('hex');
-    return [h.slice(0, 8), h.slice(8, 12), '5' + h.slice(13, 16), ((parseInt(h[16], 16) & 3) | 8).toString(16) + h.slice(17, 20), h.slice(20, 32)].join('-');
-}
 function copyDir(from, to) {
     fs.mkdirSync(to, { recursive: true });
     for (const n of fs.readdirSync(from)) {
@@ -58,6 +52,7 @@ function edit(base, e, app) {
 }
 
 for (const app of SPEC) {
+    app.id = app.from;
     if (only.length && only.indexOf(app.id) < 0) continue;
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ak-repack-'));
     const src = `apps/${app.from}/${app.from}@${app.fromVersion}.tgz`;
@@ -65,26 +60,18 @@ for (const app of SPEC) {
     const work = path.join(tmp, 'pkg');
     fs.mkdirSync(work);
     execFileSync('tar', ['-xzf', path.join(tmp, 'from.tgz'), '-C', work]);
-    const newId = app.id;
-    const oldTree = `${app.from}@${app.fromVersion}`, tree = `${newId}@${app.version}`;
+    const id = app.id;
+    const oldTree = `${id}@${app.fromVersion}`, tree = `${id}@${app.version}`;
     fs.renameSync(path.join(work, oldTree), path.join(work, tree));
     const T = path.join(work, tree);
 
-    /* the package's names */
+    /* the version */
     const m = readJson(path.join(work, 'mgu-app.json'));
-    m.id = newId; m.version = app.version; m.tree = tree;
+    m.version = app.version; m.tree = tree;
     writeJson(path.join(work, 'mgu-app.json'), m);
     const pkg = readJson(path.join(T, 'package.json'));
-    pkg.name = newId; pkg.version = app.version;
-    if (!app.keepId) pkg.oapAppSettings.loggingId = app.loggingId;
+    pkg.version = app.version;
     writeJson(path.join(T, 'package.json'), pkg);
-    const appJson = path.join(T, 'rhmiData', 'application.json');
-    if (fs.existsSync(appJson) && !app.keepId) {
-        const a = readJson(appJson);
-        a.application.name = newId;
-        a.application.uuid = uuidOf(newId);
-        writeJson(appJson, a);
-    }
 
     /* the Korean module and fonts, the app's own table and HMI texts */
     copyDir(path.join(AK, 'common', 'kit'), path.join(T, 'renderer', 'kit'));
@@ -114,22 +101,16 @@ for (const app of SPEC) {
     /* the edits */
     for (const e of EDITS.common) edit(T, e, app);
     for (const e of (EDITS[app.id] || [])) edit(e.top ? work : T, e, app);
-    if (!app.keepId) for (const f of fs.readdirSync(path.join(work, 'src'))) {
-        const p = path.join(work, 'src', f);
-        const s = fs.readFileSync(p, 'utf8');
-        const t = s.split(`'${app.from}'`).join(`'${newId}'`).split(`[${app.from}]`).join(`[${newId}]`);
-        if (t !== s) fs.writeFileSync(p, t);
-    }
 
     /* the Store's entry (apps/<id>/app.json): IterioDev's, renamed */
     const store = JSON.parse(execFileSync('git', ['-C', ROOT, 'show', `main:apps/${app.from}/app.json`]).toString());
-    store.id = newId; store.version = app.version; if (app.ko) store.texts = { ko: app.ko };
-    const storeDir = path.join(ROOT, 'apps', newId);
+    store.version = app.version; if (app.ko) store.texts = { ko: app.ko };
+    const storeDir = path.join(ROOT, 'apps', id);
     fs.mkdirSync(storeDir, { recursive: true });
     fs.writeFileSync(path.join(storeDir, 'app.json'), JSON.stringify(store, null, 1) + '\n');
 
     /* packed as IterioDev's are: the tree, mgu-app.json, src/ */
-    const outDir = path.join(ROOT, 'apps', newId);
+    const outDir = path.join(ROOT, 'apps', id);
     fs.mkdirSync(outDir, { recursive: true });
     const out = path.join(outDir, `${tree}.tgz`);
     const top = fs.readdirSync(work).sort();
