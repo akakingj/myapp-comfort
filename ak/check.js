@@ -19,7 +19,8 @@ const { execFileSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const AK = __dirname;
-const SPEC = JSON.parse(fs.readFileSync(path.join(AK, 'apps.json'), 'utf8')).apps;
+const SPEC_ALL = JSON.parse(fs.readFileSync(path.join(AK, 'apps.json'), 'utf8'));
+const SPEC = SPEC_ALL.apps, FROM = SPEC_ALL.fromRef;
 const only = process.argv.slice(2);
 let bad = 0;
 const fail = (app, msg) => { bad++; console.log(`  FAIL ${app.id}: ${msg}`); };
@@ -53,7 +54,7 @@ for (const app of SPEC) {
     if (m.id !== app.id || m.version !== app.version || m.tree !== tree) fail(app, 'mgu-app.json');
     if (pkg.name !== app.id || pkg.version !== app.version) fail(app, 'package.json');
     // the HMI's registration as IterioDev's (an update of their app)
-    const orig = execFileSync('sh', ['-c', `git -C "${ROOT}" show "main:apps/${app.id}/${app.id}@${app.fromVersion}.tgz" | tar -xzOf - "${app.id}@${app.fromVersion}/rhmiData/application.json"`]);
+    const orig = execFileSync('sh', ['-c', `git -C "${ROOT}" show "${FROM}:apps/${app.id}/${app.id}@${app.fromVersion}.tgz" | tar -xzOf - "${app.id}@${app.fromVersion}/rhmiData/application.json"`]);
     if (!orig.equals(fs.readFileSync(path.join(T, 'rhmiData', 'application.json')))) fail(app, 'rhmiData/application.json is not IterioDev\'s');
     /* syntax */
     for (const f of files) {

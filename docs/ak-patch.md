@@ -5,13 +5,13 @@
 
 ## 무엇을 바꾸나
 
-| 앱 | 원본 (main) | 이 사본 (test) |
+| 앱 | 원본 (IterioDev `f6e2b75`) | 이 사본 |
 |---|---|---|
-| Seats | `iteriodev_seats` 1.6.4 | 1.7.0 |
-| Turn View | `iteriodev_turnview` 1.7.1 | 1.8.0 |
-| Drive Recorder | `oap-driverecorder-next` 2.5.2 | 2.6.0 |
-| Tailscale | `iteriodev_tailscale` 1.2.1 | 1.3.0 |
-| Ambient Light | `iteriodev_ambient` 1.4.4 | 1.5.0 |
+| Seats | `iteriodev_seats` 1.6.4 | 1.7.1 |
+| Turn View | `iteriodev_turnview` 1.7.1 | 1.8.1 |
+| Drive Recorder | `oap-driverecorder-next` 2.5.2 | 2.6.1 |
+| Tailscale | `iteriodev_tailscale` 1.2.1 | 1.3.1 |
+| Ambient Light | `iteriodev_ambient` 1.4.4 | 1.5.1 |
 
 - 기능은 그대로이고 `tools/`는 건드리지 않습니다. 화면 글자(한국어 고정)와 색·포커스 모양(iDrive 7 순정 스킨 고정)만 바뀝니다.
 - 패키지 이름(id)은 원본과 같고 버전만 원본보다 높습니다. 그래서 설치된 원본 앱의 업데이트로 설치되고, 도구가 앱을 찾는
@@ -26,11 +26,14 @@
 - Turn View 계기판의 회전 카드는 도구가 그리므로 영어 그대로입니다. 보정 화면의 표시선 범례는 계기판 선 색(빨강,
   호박색, 초록)을 그대로 씁니다.
 - 경고(호박색)와 정상(초록) 상태 색은 뜻이 있으므로 그대로 둡니다.
+- iDrive 앱 목록의 아이콘(`rhmiData/resources/*_icon.png`)은 140×140 칸 가운데 112×112로 줄여 둘레를 비웁니다
+  (`ak/inset_icon.py`). 원본 아이콘은 칸을 꽉 채워서 iDrive 7이 고른 앱에 두르는 테두리가 그 밑에 가려 안 보였습니다.
+  Store 아이콘(`apps/<id>/icon.png`)은 그대로입니다.
 
 ## 파일
 
-- `ak/apps.json`: 앱 목록(원본 id·버전, 이 사본의 버전, Store의 한국어 제목·설명).
-- `ak/repack.js`: main에 커밋된 원본 tgz를 풀어 버전을 바꾸고, `ak/common/kit`(한국어 모듈 `ak_ko.js`, 글꼴)과
+- `ak/apps.json`: 앱 목록(원본 id·버전, 이 사본의 버전, Store의 한국어 제목·설명)과 원본 커밋 `fromRef`.
+- `ak/repack.js`: 원본 커밋(`fromRef`)의 원본 tgz를 풀어 버전을 바꾸고, `ak/common/kit`(한국어 모듈 `ak_ko.js`, 글꼴)과
   앱의 `ak/apps/<id>/ko.json`을 넣고, `ak/edits.js`의 수정을 하고, 다시 묶어 `apps/<id>/<id>@<버전>.tgz`로 씁니다.
   각 `rhmiData/**/en_GB.json` 옆에 `ko.json`으로 번역한 `ko_KR.json`을 만들고(없는 말이 있으면 멈춤),
   `apps/<id>/app.json`에 `texts.ko`(Store의 한국어 제목·설명)를 넣습니다.
@@ -55,8 +58,9 @@
 
 ## 원본이 바뀌었을 때
 
-1. IterioDev의 새 패키지를 main에 커밋하는 것은 저장소 주인이 지시할 때만 합니다.
-2. `ak/apps.json`의 `fromVersion`을 맞추고, 버전 규칙대로 이 사본의 `version`을 올립니다(원본 번호 위로).
+1. IterioDev의 새 릴리스를 병합합니다(저장소 주인이 갱신을 지시할 때). 이 다섯 앱의 원본 tgz가 `apps/<id>/`에
+   들어오면 지웁니다(이 사본은 자기 패키지만 둡니다: Store가 같은 id의 두 버전을 보지 않게).
+2. `ak/apps.json`의 `fromRef`를 그 릴리스 커밋으로, `fromVersion`을 맞추고, 버전 규칙대로 이 사본의 `version`을 올립니다(원본 번호 위로).
 3. `node ak/strings.js <풀린 패키지>`로 새 영어를 찾아 `ko.json`에 넣고, `python3 ak/bake_korean.py`.
 4. `node ak/repack.js`(멈추면 `ak/edits.js`를 원본에 맞게 고침), `node ak/check.js`, `node ak/preview.js`로 확인.
 

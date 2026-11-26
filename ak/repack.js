@@ -6,11 +6,12 @@
  *   node ak/repack.js [id ...]          every app in ak/apps.json (or those named): apps/<id>/<id>@<version>.tgz
  *   node ak/repack.js --tree DIR [id]   also leaves each unpacked package in DIR/<id> (ak/check.js, ak/preview.js)
  *
- * For each app: IterioDev's package as committed on main (apps/<from>/<from>@<fromVersion>.tgz) is unpacked in a
+ * For each app: IterioDev's package at their commit fromRef (ak/apps.json; apps/<from>/<from>@<fromVersion>.tgz) is unpacked in a
  * temporary folder, given this copy's version (ak/apps.json; the id stays IterioDev's, so it installs as an update), the
  * common files (ak/common: the Korean module, its fonts) and its own table (ak/apps/<id>/ko.json, which also gives the
- * HMI texts: each rhmiData en_GB.json gets a ko_KR.json beside it), the edits of ak/edits.js made (each must find its text exactly where it says, or the run stops), and packed again. Nothing
- * unpacked is kept in the repository. When IterioDev's packages change: commit theirs to main, set fromVersion,
+ * HMI texts: each rhmiData en_GB.json gets a ko_KR.json beside it), its iDrive icon made smaller in its square
+ * (ak/inset_icon.py), the edits of ak/edits.js made (each must find its text exactly where it says, or the run stops), and packed again. Nothing
+ * unpacked is kept in the repository. When IterioDev's packages change: merge their release, set fromRef and fromVersion, remove their new package from apps/<id>,
  * run this, check (ak/check.js), and look (ak/preview.js).
  */
 const fs = require('fs');
@@ -20,7 +21,8 @@ const { execFileSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const AK = __dirname;
-const SPEC = JSON.parse(fs.readFileSync(path.join(AK, 'apps.json'), 'utf8')).apps;
+const SPEC_ALL = JSON.parse(fs.readFileSync(path.join(AK, 'apps.json'), 'utf8'));
+const SPEC = SPEC_ALL.apps, FROM = SPEC_ALL.fromRef;
 const EDITS = require('./edits');
 
 const args = process.argv.slice(2);
@@ -56,7 +58,7 @@ for (const app of SPEC) {
     if (only.length && only.indexOf(app.id) < 0) continue;
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ak-repack-'));
     const src = `apps/${app.from}/${app.from}@${app.fromVersion}.tgz`;
-    fs.writeFileSync(path.join(tmp, 'from.tgz'), execFileSync('git', ['-C', ROOT, 'show', 'main:' + src], { maxBuffer: 1 << 30 }));
+    fs.writeFileSync(path.join(tmp, 'from.tgz'), execFileSync('git', ['-C', ROOT, 'show', FROM + ':' + src], { maxBuffer: 1 << 30 }));
     const work = path.join(tmp, 'pkg');
     fs.mkdirSync(work);
     execFileSync('tar', ['-xzf', path.join(tmp, 'from.tgz'), '-C', work]);
@@ -102,8 +104,14 @@ for (const app of SPEC) {
     for (const e of EDITS.common) edit(T, e, app);
     for (const e of (EDITS[app.id] || [])) edit(e.top ? work : T, e, app);
 
+    /* the iDrive icon smaller in its square, so iDrive 7's frame round the chosen app shows (ak/inset_icon.py) */
+    const res = path.join(T, 'rhmiData', 'resources');
+    const icons = fs.readdirSync(res).filter((n) => /_icon\.png$/.test(n)).map((n) => path.join(res, n));
+    if (!icons.length) throw new Error(`${app.id}: no rhmiData/resources/*_icon.png`);
+    execFileSync('python3', [path.join(AK, 'inset_icon.py')].concat(icons));
+
     /* the Store's entry (apps/<id>/app.json): IterioDev's, renamed */
-    const store = JSON.parse(execFileSync('git', ['-C', ROOT, 'show', `main:apps/${app.from}/app.json`]).toString());
+    const store = JSON.parse(execFileSync('git', ['-C', ROOT, 'show', `${FROM}:apps/${app.from}/app.json`]).toString());
     store.version = app.version; if (app.ko) store.texts = { ko: app.ko };
     const storeDir = path.join(ROOT, 'apps', id);
     fs.mkdirSync(storeDir, { recursive: true });
